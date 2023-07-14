@@ -2,12 +2,12 @@ const express = require('express');
 const {Pool} = require('pg');
 const app = express();
 const bd = new Pool({
-    user: 'stt',
-    password: 'stt123',
-    host: 'localhost',
+    user: 'postgres',
+    password: 's3nh@BD!',
+    host: '150.162.67.194',
     port: 5432,
     database: 'sttproject'
-});
+}); 
 
 bd.connect();
 console.log("Cliente foi conectado");
@@ -22,7 +22,7 @@ app.get('/db', async (req, res) => {
       const pesquisa = 'SELECT * FROM carros';
       const resultados = await bd.query(pesquisa);
       const carros = resultados.rows;
-
+      
       res.json(carros);
     } catch (ex) {
       console.log('Erro ao recuperar dados do banco de dados:', ex);

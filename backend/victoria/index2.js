@@ -131,7 +131,7 @@ expressapp.put('/db', async (req, res) => {
     const { marca, modelo, versao, ano, local, km, valor, placa, desconto, id } = req.body;
 
     // Executar a query SQL para atualizar o carro no banco de dados
-    const query =  'UPDATE uahsua SET marca = $1, modelo = $2, versao = $3, ano = $4, local = $5, km = $6, valor = $7::money, placa = $8, desconto = $9 WHERE id = $10';
+    const query =  'UPDATE uahsua SET marca = $1, modelo = $2, versao = $3, ano = $4, local = $5, km = $6, valor = $7, placa = $8, desconto = $9 WHERE id = $10';
     const values = [marca, modelo, versao, ano, local, km, valor, placa, desconto, id];
     await cliente.query(query, values);
 

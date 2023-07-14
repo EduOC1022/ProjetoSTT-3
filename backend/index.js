@@ -6,7 +6,7 @@ const bd = new Pool({
     password: 's3nh@BD!',
     host: '150.162.67.194',
     port: 5432,
-    database: 'sttproject'
+    database: 'projetostt'
 }); 
 
 bd.connect();
@@ -120,7 +120,7 @@ app.get('/versao/:versao', async (req, res) => {
 
 // procura por ano 
 app.get('/ano/:ano', async (req, res) => {
-  const ano = req.params.versao;
+  const ano = req.params.ano;
 
   try {
     const query = 'SELECT * FROM carros WHERE ano = $1';
@@ -141,7 +141,7 @@ app.get('/ano/:ano', async (req, res) => {
 
 // procura por local 
 app.get('/local/:local', async (req, res) => {
-  const local = req.params.versao;
+  const local = req.params.local;
 
   try {
     const query = 'SELECT * FROM carros WHERE local = $1';
@@ -162,7 +162,7 @@ app.get('/local/:local', async (req, res) => {
 
 // procura por km
 app.get('/km/:km', async (req, res) => {
-  const km = req.params.versao;
+  const km = req.params.km;
 
   try {
     const query = 'SELECT * FROM carros WHERE km = $1';
@@ -183,7 +183,7 @@ app.get('/km/:km', async (req, res) => {
 
 // procura por valor
 app.get('/valor/:valor', async (req, res) => {
-  const valor = req.params.versao;
+  const valor = req.params.valor;
 
   try {
     const query = 'SELECT * FROM carros WHERE valor = $1';

@@ -1,6 +1,9 @@
 const express = require('express');
 const {Pool} = require('pg');
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 const bd = new Pool({
     user: 'postgres',
     password: 's3nh@BD!',
@@ -11,6 +14,10 @@ const bd = new Pool({
 
 bd.connect();
 console.log("Cliente foi conectado");
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index2.html');
+});
 
 // mostra a tabela no terminal
 bd.query('SELECT * FROM carros').then(results => {
@@ -199,6 +206,53 @@ app.get('/valor/:valor', async (req, res) => {
   } catch (ex) {
     console.log('Erro ao recuperar dados do banco de dados:', ex);
     res.status(500).send('Erro ao recuperar dados do banco de dados.');
+  }
+});
+
+app.post('/db', async (req, res) => {
+  try {
+    const { marca, modelo, versao, ano, local, km, valor, placa, desconto } = req.body;
+
+    // Executar a query SQL para inserir os dados no banco de dados
+    const query = 'INSERT INTO carros (marca, modelo, versao, ano, local, km, valor, placa, desconto) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+    await bd.query(query, [marca, modelo, versao, ano, local, km, valor, placa, desconto]);
+
+    res.status(201).json({ message: 'Recurso criado com sucesso' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao criar o recurso' });
+  }
+});
+
+
+app.delete('/db', async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    // Executar a query SQL para excluir o registro do banco de dados
+    const query = 'DELETE FROM carros WHERE id = $1';
+    await bd.query(query, [id]);
+
+    res.status(201).json({ message: 'Recurso excluído com sucesso' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao excluir o recurso' });
+  }
+});
+
+app.put('/db', async (req, res) => {
+  try {
+    const { marca, modelo, versao, ano, local, km, valor, placa, desconto, id } = req.body;
+
+    // Executar a query SQL para atualizar o carro no banco de dados
+    const query =  'UPDATE carros SET marca = $1, modelo = $2, versao = $3, ano = $4, local = $5, km = $6, valor = $7, placa = $8, desconto = $9 WHERE id = $10';
+    const values = [marca, modelo, versao, ano, local, km, valor, placa, desconto, id];
+    await bd.query(query, values);
+
+    res.json({ message: 'Carro atualizado com sucesso.' });
+  } catch (ex) {
+    console.log('Erro: ' + ex);
+    res.status(500).send('Erro ao atualizar o carro.');
   }
 });
 

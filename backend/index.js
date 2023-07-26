@@ -20,10 +20,10 @@ app.get('/', (req, res) => {
 });
 
 // mostra a tabela no terminal
-bd.query('SELECT * FROM carros').then(results => {
+/*bd.query('SELECT * FROM carros').then(results => {
     const resultados = results.rows;
     console.table(resultados);
-});
+});*/
 
 // GET 
 
@@ -63,7 +63,7 @@ app.get('/id/:id', async (req, res) => {
 });
 
 // procura por marca 
-app.get('/db/:marca', async (req, res) => {
+app.get('/marca/:marca', async (req, res) => {
   const marca = req.params.marca;
 
   try {
@@ -217,10 +217,10 @@ app.post('/db', async (req, res) => {
     const query = 'INSERT INTO carros (marca, modelo, versao, ano, local, km, valor, placa, desconto) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
     await bd.query(query, [marca, modelo, versao, ano, local, km, valor, placa, desconto]);
 
-    res.status(201).json({ message: 'Recurso criado com sucesso' });
+    res.status(404).send('Recurso criado com sucesso');
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro ao criar o recurso' });
+    res.status(500).send('Erro ao criar o recurso' );
   }
 });
 
@@ -233,10 +233,10 @@ app.delete('/db', async (req, res) => {
     const query = 'DELETE FROM carros WHERE id = $1';
     await bd.query(query, [id]);
 
-    res.status(201).json({ message: 'Recurso excluído com sucesso' });
+    res.status(404).send('Recurso excluído com sucesso');
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro ao excluir o recurso' });
+    res.status(500).send('Erro ao excluir o recurso' );
   }
 });
 
@@ -249,7 +249,7 @@ app.put('/db', async (req, res) => {
     const values = [marca, modelo, versao, ano, local, km, valor, placa, desconto, id];
     await bd.query(query, values);
 
-    res.json({ message: 'Carro atualizado com sucesso.' });
+    res.status(404).send('Carro atualizado com sucesso.');
   } catch (ex) {
     console.log('Erro: ' + ex);
     res.status(500).send('Erro ao atualizar o carro.');
